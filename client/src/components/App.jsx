@@ -20,7 +20,8 @@ function App() {
 
   return (
     <div className="App">
-      <button onClick={getDataFromServer}>Access server using proxy</button>
+      <button onClick={getDataFromServer}>Access server using proxyTest3</button>
+      <p></p>
       <p>data : {data}</p>
     </div>
   );
