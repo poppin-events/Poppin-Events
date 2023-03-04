@@ -1,7 +1,8 @@
 import '../stylesheets/App.css';
 import React, { useState } from 'react';
 import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
-require('dotenv').config;
+
+// require('dotenv').config;
 
 function Map() {
   const { isLoaded } = useJsApiLoader({
@@ -9,7 +10,16 @@ function Map() {
   });
 
   if (!isLoaded) return <div>Loading...</div>;
-  return <GoogleMap zoom={10} center={{lat: 44, lng: -80}} mapContainerClassName="map-container"></GoogleMap>;
+
+  return (
+    <GoogleMap
+      zoom={10}
+      center={{ lat: 44, lng: -80 }}
+      mapContainerClassName="map-container"
+    >
+      {/* Place Holder */}
+    </GoogleMap>
+  );
 }
 
 export default Map;
