@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 function App() {
   const [data, setData] = useState();
+  console.log('Jon was here'); // test2
   const urlWithProxy = '/api/v1';
 
   function getDataFromServer() {
