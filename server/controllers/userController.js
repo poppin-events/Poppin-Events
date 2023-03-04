@@ -1,5 +1,5 @@
 // import the user model
-const db = require('../models/model');
+const db = require('../models/dbModel');
 
 const userController = {};
 
