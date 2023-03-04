@@ -2,6 +2,8 @@ import '../stylesheets/App.css';
 import axios from 'axios';
 import { useState } from 'react';
 
+console.log('derrick');
+
 function App() {
   const [data, setData] = useState();
   const urlWithProxy = '/api/v1';
