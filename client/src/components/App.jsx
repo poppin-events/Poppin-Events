@@ -1,6 +1,6 @@
 import '../stylesheets/App.css';
 import axios from 'axios';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 console.log('derrick');
 
@@ -23,7 +23,8 @@ function App() {
     <div className="App">
       <button onClick={getDataFromServer}>Access server using proxy TEST1Test3</button>
       <p></p>
-      <p>data : {data}</p>
+      <p>data is : {data}</p>
+      <p>Clark, Derrick, and Jonathan are pretty cool</p>
     </div>
   );
 }
