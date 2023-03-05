@@ -7,7 +7,7 @@ const eventController = {};
 // get all events from database
 eventController.getEvents = async (req, res, next) => {
   try {
-    const query = await db.query('SELECT e.*, u.name AS organizer, u.email FROM events LEFT OUTER JOIN users u ON e.organizer_id = u.id');
+    const query = await db.query('SELECT e.id, e.name, e.description, e.date, e.address, jsonb_agg(json_build_object(\'lat\', e.lat, \'lng\', e.lng)) AS location, u.name AS organizer, u.email, u.picture FROM events e LEFT OUTER JOIN users u ON e.organizer_id = u.id group by e.id, u.name, u.email, u.picture');
     res.locals.events = query.rows;
     return next();
   } catch (error) {
