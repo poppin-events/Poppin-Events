@@ -1,6 +1,5 @@
 import '../stylesheets/App.css';
 import axios from 'axios';
-import React from 'react';
 import Map from './Map';
 import React, { useState, useEffect } from 'react';
 import jwt_decode from 'jwt-decode';
@@ -35,13 +34,10 @@ function App() {
 
 
   return (
-    <div className="App">
-      <Map />
-    </div>
     <>
       <UserContext.Provider value={{user, userJWT}}>
         <Login setUser={(u) => setUser(u)} setUserJWT={(jwt) => setUserJWT(jwt)}></Login>
-
+        <Map />
       </UserContext.Provider>
     </>
   );
