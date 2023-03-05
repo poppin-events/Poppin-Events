@@ -6,6 +6,7 @@ const userController = {};
 
 // decode jwt data for the requester's email
 userController.getInfo = (req, res, next) => {
+  console.log(req.body);
   // parse the jwt from the body of the request
   const {name, email} = jwt_decode(req.body.jwt);
   res.locals.email = token.email;
@@ -15,12 +16,15 @@ userController.getInfo = (req, res, next) => {
 
 // get user info from database
 userController.login = async (req, res, next) => {
-  const query = `SELECT * FROM users WHERE email = ${res.locals.email}`; // FIXME: Need google data format to know what to query
+  console.log('req body in userController.login', req.body)
+  const { name, email } = req.body;
+  const query = `SELECT * FROM users WHERE email = '${email}'`; // FIXME: Need google data format to know what to query
   const user = await db.query(query);
+  console.log(`response from database on login for ${email} is: `, user);
   // if the user does not exist in the database, create them
-  if (user === []) {
+  if (user.rows.length === 0) {
     const createUsr = 'INSERT INTO users (name, email) VALUES ($1, $2)';
-    const userVals = [res.locals.name, res.locals.email];
+    const userVals = [name, email];
     await db.query(createUsr, userVals);
   }
   return next();
