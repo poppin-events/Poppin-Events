@@ -7,13 +7,13 @@ const eventController = {};
 // get all events from database
 eventController.getEvents = async (req, res, next) => {
   try {
-    const query = await db.query('SELECT e.*, u.name AS organizer, u.email FROM events LEFT OUTER JOIN users u ON e.organizer_id = u.id');
+    const query = await db.query('SELECT e.*, u.name AS organizer, u.email FROM events e LEFT OUTER JOIN users u ON e.organizer_id = u.id');
     res.locals.events = query.rows;
     return next();
   } catch (error) {
     return next({
       log: 'eventController.getEvents error',
-      message: { err: 'Erro getting events from database' },
+      message: { err: 'Error getting events from database' },
     });
   }
 };
