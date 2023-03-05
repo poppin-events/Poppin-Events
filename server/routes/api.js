@@ -1,6 +1,7 @@
 const express = require('express');
 const userController = require('../controllers/userController');
 const eventController = require('../controllers/eventController');
+const sessionController = require('../controllers/sessionController');
 
 const router = express.Router();
 
@@ -44,6 +45,18 @@ router.put(
 router.delete(
   '/events',
   eventController.deleteEvent,
+  (req, res) => res.sendStatus(200),
+);
+
+// Checks for active sessions
+router.get(
+  '/sessions',
+  sessionController.validateSession,
+  (req, res) => res.status(200).send(res.locals),
+);
+router.delete(
+  '/sessions',
+  sessionController.deleteSession,
   (req, res) => res.sendStatus(200),
 );
 

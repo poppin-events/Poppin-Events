@@ -16,18 +16,34 @@ userController.getInfo = (req, res, next) => {
 
 // get user info from database
 userController.login = async (req, res, next) => {
-  console.log('req body in userController.login', req.body)
-  const { name, email } = req.body;
-  const query = `SELECT * FROM users WHERE email = '${email}'`; // FIXME: Need google data format to know what to query
-  const user = await db.query(query);
-  console.log(`response from database on login for ${email} is: `, user);
-  // if the user does not exist in the database, create them
-  if (user.rows.length === 0) {
-    const createUsr = 'INSERT INTO users (name, email) VALUES ($1, $2)';
-    const userVals = [name, email];
-    await db.query(createUsr, userVals);
+  try {
+    // console.log('req body in userController.login', req.body);
+    const { name, email, picture } = req.body;
+    const query = `SELECT * FROM users WHERE email = '${email}'`; // FIXME: Need google data format to know what to query
+    const user = await db.query(query);
+    // console.log(`response from database on login for ${email} is: `, user.rows);
+    // if the user does not exist in the database, create them
+    // console.log('picture from JWT is: ', picture);
+    const userVals = [name, email, picture];
+    if (user.rows.length === 0) {
+      const createUsr = 'INSERT INTO users (name, email, picture) VALUES ($1, $2, $3)';
+      await db.query(createUsr, userVals);
+    } else if (user.rows[0].picture !== picture) {
+      const updatePic = 'UPDATE users SET picture = $2 WHERE email = $1;';
+      await db.query(updatePic, userVals.slice(1));
+    }
+    req.session.loggedIn = true;
+    req.session.email = email;
+    req.session.name = name;
+    req.session.picture = picture;
+    return next();
+  } catch (e) {
+    return next({
+      log: 'Error in userController.login',
+      status: 500,
+      message: { error: e.message },
+    });
   }
-  return next();
 };
 
 // get user info from database
