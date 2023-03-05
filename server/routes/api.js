@@ -5,17 +5,18 @@ const eventController = require('../controllers/eventController');
 const router = express.Router();
 
 // Responds with user info (location + events) when passed in the correct google id
-router.get(
-  '/user/:id',
-  userController.getUser,
-  (req, res) => res.status(200).json(res.locals.user),
-);
+// router.get(
+//   '/user/:id',
+//   userController.getUser,
+//   (req, res) => res.status(200).json(res.locals.user),
+// );
 
-// Create a new user in the database
+// Log in or a new user in the database
 router.post(
-  '/user',
-  userController.createUser,
-  (req, res) => res.end(),
+  '/users',
+  userController.getInfo,
+  userController.login,
+  (req, res) => res.status(200).end(),
 );
 
 // Responds with all events in the database (Name, Location, Date, Description, Created By)
@@ -27,21 +28,22 @@ router.get(
 
 // Create an event in the database
 router.post(
-  '/event',
+  '/events',
+  userController.getInfo,
   eventController.createEvent,
   (req, res) => res.sendStatus(200),
 );
 
 // Update an event in the database
 router.put(
-  '/event',
+  '/events',
   eventController.updateEvent,
   (req, res) => res.sendStatus(200),
 );
 
 // Delete an event in the database
 router.delete(
-  '/event',
+  '/events',
   eventController.deleteEvent,
   (req, res) => res.sendStatus(200),
 );
