@@ -1,6 +1,7 @@
 import '../stylesheets/App.css';
 import React, { useState, useEffect } from 'react';
 import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
+import axios from 'axios';
 
 // const script = document.createElement('script');
 // script.src = 'https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap';
@@ -19,16 +20,14 @@ function Map() {
   // const data = [{title: "Party Time", creator: "Derrick", location: {lat: 44, lng: -80}, date: "Dec 11", description: "ITS WORKING"}, {title: "Party #2", creator: "Derrick", location: {lat: 43, lng: -80}, date: "Jan 1", description: "HELLO"}, {title: "Party 3!!!", creator: "Jonathan", location: {lat: 42, lng: -80}, date: "March 5th", description: "WORKING TEST!!!!"}];
 
   useEffect(() => {
-    fetch('/api/events')
-      .then((res) => res.json())
-      .then((data) => {
-        setMarkerData(data);
-      });
+    const getEvents = async () => {
+      const response = await axios.get('/api/events');
+      console.log('IN USE EFFECT response is: ', response);
+      const { data } = response;
+      setMarkerData(data);
+    };
+    getEvents();
   }, []);
-
-  const eventBox = (el) => {
-    setEventData(el);
-  };
 
   const currPosition = () => {
     if (navigator.geolocation) {
@@ -46,6 +45,7 @@ function Map() {
   };
 
   if (!isLoaded) return <div>Loading...</div>;
+
   return (
     <div>
       <div className="info">
@@ -61,8 +61,8 @@ function Map() {
         center={mapPos}
         mapContainerClassName="map-container"
       >
-        {markerData.map((place) => (
-          <Marker title={place.title} position={place.location} onClick={() => eventBox(place)} />
+        {markerData.length > 0 && markerData.map((place) => (
+          <Marker key={place.id} title={place.name} position={place.location[0]} onClick={() => setEventData(place)} />
         ))}
     </GoogleMap>
     </div>
