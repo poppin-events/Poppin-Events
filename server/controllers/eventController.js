@@ -39,10 +39,11 @@ eventController.getEvents = async (req, res, next) => {
 // create a new event in the database
 eventController.createEvent = async (req, res, next) => {
   try {
-    const { name, description, date, location } = req.body;
+    const { name, description, date, address } = req.body;
+    const { lat, lng } = req.body.location;
     // insert the event into the database using a subquery for the organizer id
-    const addEventQuery = 'INSERT INTO events (name, description, date, location, organizer_id) VALUES ($1, $2, $3, $4, (SELECT id FROM users WHERE email=$5))';
-    const newEventVals = [name, description, date, location, res.locals.email];
+    const addEventQuery = 'INSERT INTO events (name, description, date, location, lat, lng, organizer_id) VALUES ($1, $2, $3, $4, $5, $6, (SELECT id FROM users WHERE email=$7))';
+    const newEventVals = [name, description, date, address, lat, lng, res.locals.email];
     await db.query(addEventQuery, newEventVals);
     return next();
   } catch (error) {
