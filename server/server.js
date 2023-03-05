@@ -21,7 +21,7 @@ app.use(session({
 app.use(express.static(path.resolve(__dirname, '../dist')));
 // route handlers
 
-app.use('/api', apiRouter);
+// app.use('/api', apiRouter);
 
 // catch-all 404 route handler
 app.use((_, res) => res.status(404).send('Page Not Found'));
