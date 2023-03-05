@@ -14,7 +14,6 @@ const router = express.Router();
 // Log in or a new user in the database
 router.post(
   '/users',
-  userController.getInfo,
   userController.login,
   (req, res) => res.status(200).end(),
 );
