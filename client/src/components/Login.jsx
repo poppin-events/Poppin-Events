@@ -1,3 +1,4 @@
+/* eslint-disable react/function-component-definition */
 import React, {useState, useContext} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FcGoogle } from 'react-icons/fc';
@@ -16,16 +17,22 @@ const Login = (props) => {
   console.log('CONTEXT VALUES ARE, jwt: ', contextJWT);
   const [user, setUser] = useState(null);
 
-  const responseGoogle = (response) => {
+  const responseGoogle = async (response) => {
     console.log('response is: ', response);
     props.setUserJWT(response.credential);
     const userObject = jwt_decode(response.credential);
     console.log('user: ', userObject);
     const { name, email, picture } = userObject;
     props.setUser({name, email, picture});
-    axios.post('/api/users', {
-      name, email
-    });
+    try {
+
+      const res = await axios.post('/api/users', {
+        name, email
+      });
+      console.log('post response is: ', res);
+    } catch (e) {
+      console.log('error in post: ', e.message);
+    }
   }
 
   return (
