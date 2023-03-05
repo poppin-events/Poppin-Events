@@ -1,7 +1,7 @@
 // require in dependencies
 const path = require('path');
 const express = require('express');
-const apiRouter = require('./routes/api');
+// const apiRouter = require('./routes/api');
 // require in routes
 
 const PORT = 5000;
@@ -14,7 +14,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.resolve(__dirname, '../dist')));
 // route handlers
 
-app.use('/api', apiRouter);
+// app.use('/api', apiRouter);
 
 // catch-all 404 route handler
 app.use((_, res) => res.status(404).send('Page Not Found'));

@@ -13,7 +13,7 @@ eventController.getEvents = async (req, res, next) => {
   } catch (error) {
     return next({
       log: 'eventController.getEvents error',
-      message: { err: 'Erro getting events from database' },
+      message: { err: 'Error getting events from database' },
     });
   }
 };
