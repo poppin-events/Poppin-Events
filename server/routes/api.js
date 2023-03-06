@@ -16,7 +16,7 @@ const router = express.Router();
 router.post(
   '/users',
   userController.login,
-  (req, res) => res.status(200).end(),
+  (req, res) => res.status(200).json(res.locals.id),
 );
 
 // Responds with all events in the database (Name, Location, Date, Description, Created By)
@@ -29,7 +29,6 @@ router.get(
 // Create an event in the database
 router.post(
   '/events',
-  userController.getInfo,
   eventController.createEvent,
   (req, res) => res.sendStatus(200),
 );
