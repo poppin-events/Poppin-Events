@@ -9,6 +9,7 @@ sessionController.validateSession = (req, res, next) => {
       email: req.session.email,
       picture: req.session.picture,
       loggedIn: req.session.loggedIn,
+      id: req.session.userID,
     };
   } else {
     res.locals.loggedIn = false;

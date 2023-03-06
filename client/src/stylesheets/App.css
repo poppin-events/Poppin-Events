@@ -1,4 +1,109 @@
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  outline: 5px solid black;
+  font-family: 'Poppins', sans-serif;
+  padding-top: 100px;
+}
+
+button, input {
+  font-family: 'Poppins', sans-serif;
+}
+
+button {
+  cursor: pointer;
+}
+
+#root {
+  width: 100%;
+  /* border: 10px solid orange; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+* {
+  outline: 1px solid lime;
+}
+
+.info-list {
+  list-style: none;
+}
+
 .map-container {
   width: 1000px;
   height: 800px;
+}
+
+.create-form {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+}
+
+.create-form input {
+border: none;
+outline: none;
+border-bottom: 1px solid lightgray;
+text-align: center;
+}
+
+.autocomplete-input input {
+  width: 100%;
+}
+.screen-reader-text {
+  border: 0;
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: inset(50%);
+  height: 1px;
+  margin: -1px;
+  width: 1px;
+  overflow: hidden;
+  position: absolute !important;
+  word-wrap: normal !important;
+}
+
+.autocomplete-input {
+  display: inline-block;
+}
+
+.navbar {
+  background: lightgray;
+  opacity: .7;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-list {
+  display: flex;
+  list-style: none;
+}
+.nav-list li{
+  margin-right: 10px;
+}
+
+a {
+  cursor: pointer;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.brand-heading {
+  margin-left: 10px;
+}
+
+.map-section {
+  outline: 5px solid black;
+  display: flex;
+}
+
+.create-event-container {
+  text-align: center;
 }

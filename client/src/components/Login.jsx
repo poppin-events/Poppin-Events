@@ -23,7 +23,6 @@ const Login = (props) => {
     const userObject = jwt_decode(response.credential);
     // console.log('user: ', userObject);
     const { name, email, picture } = userObject;
-    props.setUser({ name, email, picture });
 
     try {
       const res = await axios.post('/api/users', {
@@ -31,10 +30,14 @@ const Login = (props) => {
       });
       console.log('post response is: ', res);
       // reroute to map
-      if (res.status === 200) navigate('/map');
+      if (res.status === 200){
+        props.setUser({ name, email, picture, id: res.data});
+        navigate('/map');
+      }
     } catch (e) {
       console.log('error in post: ', e.message);
     }
+  
   }
 
   return (

@@ -1,32 +1,31 @@
 import '../stylesheets/App.css';
 import React, { useState, useEffect } from 'react';
-import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
+import { GoogleMap, useJsApiLoader, Marker, Autocomplete } from '@react-google-maps/api';
 import axios from 'axios';
-
-// const script = document.createElement('script');
-// script.src = 'https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap';
-// script.async = true;
+import MarkerCreator from './MarkerCreator';
 
 function Map() {
-  const [mapPos, setMapPos] = useState({ lat: 44, lng: -80 });
+  const [mapPos, setMapPos] = useState({ lat: 0.37766641e2, lng: -0.123098308e3 });
   const [markerData, setMarkerData] = useState([]);
-  const [eventData, setEventData] = useState({title: "No Party", creator: "Derrick", location: {lat: 37.772, lng: -122.214}, date: "Dec 11", description: "ITS WORKING"});
+  const [eventData, setEventData] = useState(null);
 
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
+    libraries: ['places'],
   });
 
   // get all markers from database
-  // const data = [{title: "Party Time", creator: "Derrick", location: {lat: 44, lng: -80}, date: "Dec 11", description: "ITS WORKING"}, {title: "Party #2", creator: "Derrick", location: {lat: 43, lng: -80}, date: "Jan 1", description: "HELLO"}, {title: "Party 3!!!", creator: "Jonathan", location: {lat: 42, lng: -80}, date: "March 5th", description: "WORKING TEST!!!!"}];
-
   useEffect(() => {
-    const getEvents = async () => {
-      const response = await axios.get('/api/events');
-      console.log('IN USE EFFECT response is: ', response);
-      const { data } = response;
-      setMarkerData(data);
-    };
-    getEvents();
+    try {
+      const getEvents = async () => {
+        const response = await axios.get('/api/events');
+        const { data } = response;
+        setMarkerData(data);
+      };
+      getEvents();
+    } catch (e) {
+      console.log('error in getEvents: ', e.message);
+    }
   }, []);
 
   const currPosition = () => {
@@ -47,24 +46,36 @@ function Map() {
   if (!isLoaded) return <div>Loading...</div>;
 
   return (
-    <div>
-      <div className="info">
-        <p>Event Title: {eventData.name}</p>
-        <p>Event Creator: {eventData.creator}</p>
-        <p>Event Location: {eventData.location.lat} {eventData.location.lng}</p>
-        <p>Event Date: {eventData.date}</p>
-        <p>Event Description: {eventData.description}</p>
-      </div>
-      <input type="button" onClick={() => currPosition()} />
+    <div className="map-section">
       <GoogleMap
         zoom={10}
         center={mapPos}
         mapContainerClassName="map-container"
       >
         {markerData.length > 0 && markerData.map((place) => (
-          <Marker key={place.id} title={place.name} position={place.location[0]} onClick={() => setEventData(place)} />
+          <Marker
+            key={place.id}
+            title={place.name}
+            position={place.location[0]}
+            onClick={() => setEventData(place)}
+          />
         ))}
-    </GoogleMap>
+      </GoogleMap>
+      <MarkerCreator />
+      {
+        eventData && 
+        (<div className="info-container">
+          <ul className="info-list">
+            <li className="info-list-item">Event Title: {eventData.name}</li>
+            <li className="info-list-item">Organizer: {eventData.organizer}</li>
+            <li className="info-list-item">Email: {eventData.email}</li>
+            <li className="info-list-item">Location: {eventData.address}</li>
+            <li className="info-list-item">Date: {(new Date(eventData.date)).toUTCString()}</li>
+            <li className="info-list-item">Description: {eventData.description}</li>
+          </ul>
+        </div>)
+      }
+      <button onClick={() => currPosition()}>Go to current location</button>
     </div>
   );
 }
