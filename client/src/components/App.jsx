@@ -11,29 +11,7 @@ import {Routes, Route, useNavigate} from 'react-router-dom';
 function App(props) {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
-  // const [userJWT, setUserJWT] = useState(null);
   console.log('in APP, user is: ', user);
-  // console.log('in APP, userJWT is: ', userJWT);
-
-  // const urlWithProxy = '/api/v1';
-  // function handleCallbackResponse(response) {
-  //   console.log('response: ', response);
-  //   console.log('credential ', response.credential);
-  //   const userObject = jwt_decode(response.credential);
-  //   console.log('user is: ', userObject);
-  // }
-
-  // useEffect(() => {
-  //   /* global google */
-  //   google.accounts.id.initialize({
-  //     client_id: '795315060039-si05m90ads2mnsac9pfkj1t1krltss6k.apps.googleusercontent.com',
-  //     callback: handleCallbackResponse,
-  //   });
-  //   google.accounts.id.renderButton(
-  //     document.querySelector('.login-div'),
-  //     { theme: 'outline', size: 'large' }
-  //   );
-  // }, []);
 
   useEffect(() => {
     console.log('in useEffect, and user is: ', user);
@@ -46,6 +24,7 @@ function App(props) {
             name: userInfo.data.name,
             email: userInfo.data.email,
             picture: userInfo.data.picture,
+            id: userInfo.data.id,
           });
           navigate('/map');
         }
@@ -78,13 +57,16 @@ function App(props) {
 
   return (
     <>
-      <h1>Locale Events</h1>
-      {user &&
-        <>
-          <button onClick={logout}> logout </button>
-          <h2>{user.name}</h2>
-        </>
-      }
+      <nav className="navbar">
+        <h1 className="brand-heading">Locale Events</h1>
+        {user &&
+          <ul className="nav-list">
+            <li> <a onClick={logout}> Logout </a></li>
+            <li>{user.name}</li>
+          </ul>
+        }
+      </nav>
+      
       <UserContext.Provider value={{user}}>
         <Routes>
           <Route

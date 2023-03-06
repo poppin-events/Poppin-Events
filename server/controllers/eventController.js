@@ -7,7 +7,7 @@ const eventController = {};
 // get all events from database
 eventController.getEvents = async (req, res, next) => {
   try {
-    const query = await db.query('SELECT e.id, e.name, e.description, e.date, e.address, jsonb_agg(json_build_object(\'lat\', e.lat, \'lng\', e.lng)) AS location, u.name AS organizer, u.email, u.picture FROM events e LEFT OUTER JOIN users u ON e.organizer_id = u.id group by e.id, u.name, u.email, u.picture');
+    const query = await db.query('SELECT e.id, e.name, e.description, e.date, e.loc_name, e.address, jsonb_agg(json_build_object(\'lat\', e.lat, \'lng\', e.lng)) AS location, u.name AS organizer, u.email, u.picture FROM events e LEFT OUTER JOIN users u ON e.organizer_id = u.id group by e.id, u.name, u.email, u.picture');
     res.locals.events = query.rows;
     return next();
   } catch (error) {
@@ -39,11 +39,12 @@ eventController.getEvents = async (req, res, next) => {
 // create a new event in the database
 eventController.createEvent = async (req, res, next) => {
   try {
-    const { name, description, date, address } = req.body;
+    console.log('in event creator with req: ', req.body);
+    const { title, description, date, locName, address, id } = req.body;
     const { lat, lng } = req.body.location;
     // insert the event into the database using a subquery for the organizer id
-    const addEventQuery = 'INSERT INTO events (name, description, date, location, lat, lng, organizer_id) VALUES ($1, $2, $3, $4, $5, $6, (SELECT id FROM users WHERE email=$7))';
-    const newEventVals = [name, description, date, address, lat, lng, res.locals.email];
+    const addEventQuery = 'INSERT INTO events (name, description, date, loc_name, address, lat, lng, organizer_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)';
+    const newEventVals = [title, description, date, locName, address, lat, lng, id];
     await db.query(addEventQuery, newEventVals);
     return next();
   } catch (error) {
@@ -57,10 +58,10 @@ eventController.createEvent = async (req, res, next) => {
 // update an event in the database
 eventController.updateEvent = async (req, res, next) => {
   const {
-    name, description, date, location, organizer_id,
+    name, description, date, locName, location, organizer_id, id,
   } = req.body;
-  const values = [name, description, date, location, organizer_id];
-  const text = 'UPDATE events SET name = $1, description = $2, date = $3, location = $4, organizer_id = $5 WHERE id = $6';
+  const values = [name, description, date, locName, location, organizer_id, id];
+  const text = 'UPDATE events SET name = $1, description = $2, date = $3, loc_name = $4 location = $5, organizer_id = $6 WHERE id = $7';
   try {
     await db.query(text, values);
     return next();
