@@ -37,7 +37,7 @@ const Login = (props) => {
     } catch (e) {
       console.log('error in post: ', e.message);
     }
-  
+
   }
 
   return (
@@ -50,6 +50,8 @@ const Login = (props) => {
               className="login-button"
               onClick={renderProps.onClick}
               disabled={renderProps.disabled}
+
+
             >
               <FcGoogle className="" /> Sign in with google
             </button>
@@ -57,6 +59,9 @@ const Login = (props) => {
           onSuccess={responseGoogle}
           onFailure={responseGoogle}
           cookiePolicy="single_host_origin"
+          size="medium"
+
+
         />
       </GoogleOAuthProvider>
     </div>

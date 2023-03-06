@@ -56,7 +56,7 @@ export default function MarkerCreator() {
   };
 
   return (
-    <div className="create-event-container">
+    <div className="create-event-container box-shadow-1">
       <h4>Create an Event</h4>
       <form id="add-event" className="create-form" onSubmit={handleSubmit}>
         <label className="screen-reader-text" htmlFor="event-title">
@@ -74,14 +74,14 @@ export default function MarkerCreator() {
         <label className="screen-reader-text" htmlFor="event-address">
           Event Address:
         </label>
-        <Autocomplete className="autocomplete-input">
-          <input id="event-address" type="text" onChange={(e) => setAddress(e.target.value)} value={address} required />
+        <Autocomplete className="autocomplete-container">
+          <input className="autocomplete-input" type="text" onChange={(e) => setAddress(e.target.value)} value={address} required />
         </Autocomplete>
         <label className="screen-reader-text" htmlFor="event-date">
           Date:
         </label>
         <input placeholder="Date and time" id="event-date" type="datetime-local" onChange={(e) => setDate(e.target.value)} value={date} required />
-        <button>Submit</button>
+        <button className="button-primary">Submit</button>
       </form>
     </div>
   );

@@ -50,8 +50,9 @@ function Map() {
       <GoogleMap
         zoom={10}
         center={mapPos}
-        mapContainerClassName="map-container"
+        mapContainerClassName="map-container box-shadow-1"
       >
+        <button className="current-location-button" onClick={() => currPosition()}>Go to current location</button>
         {markerData.length > 0 && markerData.map((place) => (
           <Marker
             key={place.id}
@@ -63,7 +64,7 @@ function Map() {
       </GoogleMap>
       <MarkerCreator />
       {
-        eventData && 
+        eventData &&
         (<div className="info-container">
           <ul className="info-list">
             <li className="info-list-item">Event Title: {eventData.name}</li>
@@ -75,7 +76,7 @@ function Map() {
           </ul>
         </div>)
       }
-      <button onClick={() => currPosition()}>Go to current location</button>
+
     </div>
   );
 }
