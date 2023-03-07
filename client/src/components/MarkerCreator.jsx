@@ -3,15 +3,6 @@ import axios from 'axios';
 import { useJsApiLoader } from '@react-google-maps/api';
 import { UserContext } from './UserContext';
 import Autocomplete from 'react-google-autocomplete';
-/*
-  Title
-  Creator name
-  location as address
-  date
-  description
-*/
-
-// let url = `https://maps.googleapis.com/maps/api/geocode/json?address=${URLencoded autocomplete address}}&key=${import.meta.env.VITE_GOOGLE_MAPS_API_KEY}`
 
 const libraries = ['places'];
 export default function MarkerCreator(props) {
@@ -21,7 +12,7 @@ export default function MarkerCreator(props) {
   });
 
   const { user } = useContext(UserContext);
-
+  // state
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
   const [date, setDate] = useState('');
@@ -35,8 +26,7 @@ export default function MarkerCreator(props) {
     try {
       console.log('in MARKER CREATOR user is: ', user.id);
       const { id, email, name: username } = user;
-      // name, address (actual), organizer (name), email, date, description, location (coords), id
-      // locName => loc_name, eventID => id, location = [{lat:, lng:}] 
+      // new event object for database
       const event = {
         name,
         address,
@@ -45,53 +35,44 @@ export default function MarkerCreator(props) {
         description,
         userID: id,
       };
-      console.log('THIS IS THE ADDRESS: ', address)
+      // encode the address
       const encoded = address.replaceAll(' ', '+');
-      console.log('THIS IS THE ENCODED ADDRESS: ', encoded)
       const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encoded}&key=AIzaSyBCOm76ZZYuU7YSbYUmDRwhdj8XTW5K5jk`;
+      // geocode the address
       const response = await axios.get(url);
-      console.log('GEOLOCATION response is: ', response);
       const data = response.data.results[0];
-      console.log('GEOLOCATION data is: ', data);
       event.location = [{
         lat: data.geometry.location.lat,
         lng: data.geometry.location.lng,
       }];
+      // send the post request to the server
       const eventID = await axios.post('/api/events', event);
-      // event.eventID = eventID.data.id;
+      // add other pairs to the event object for the front-end to read
       event.id = eventID.data.id;
       event.email = email;
       event.organizer = username;
+      // add the new event into state to rerender the map
       props.setMarkerData(prevMarkerData => {
-        console.log('TRYING TO UPDATE STATE ARRAY...');
-        console.log('prevMarkerData is ', prevMarkerData);
-        console.log('event is: ', event);
         return [...prevMarkerData, event];
       });
-      //console.log('most recent marker is: ', markerData[markerData.length - 1]);
-      // email from context and organizer from context
-      // get event id to store in state
     } catch (err) {
       console.log('error in post: ', err.message);
     }
   };
 
+  // autocomplete onLoad
   function onLoad(ac) {
     console.log('here in ONLOAD, ac is: ', ac);
     autocomplete = ac;
   }
 
+  // autocomplete change handler
   function handleChange() {
-    
     console.log('autocomplete is currently: ', autocomplete);
     if(autocomplete !== null) console.log('autocomplete place is: ', autocomplete.getPlace());
-    // if (e !== null) {
-    //   console.log(e.getPlace());
-    // } else {
-    //   console.log('Autocomplete is not loaded yet!');
-    // }
   }
 
+  // <Autocomplete /> component imported from @react-google-maps/api to have autocomplete address
   return (
     <div className="create-event-container box-shadow-1">
       <h4>Create an Event</h4>
@@ -119,9 +100,6 @@ export default function MarkerCreator(props) {
             setAddress(place.formatted_address);
           }}
         />
-        {/* <Autocomplete className="autocomplete-container" onLoad={onLoad} onPlaceChanged={handleChange}>
-          <input className="autocomplete-input" type="text" required />
-        </Autocomplete> */}
         <label className="screen-reader-text" htmlFor="event-date">
           Date:
         </label>

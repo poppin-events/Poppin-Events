@@ -24,15 +24,18 @@ export default function MarkerUpdator(props) {
   
   const [name, setName] = useState(props.eventData.name);
   const [address, setAddress] = useState(props.eventData.address);
-  const [date, setDate] = useState(props.eventData.date);
+  const [date, setDate] = useState(props.eventData.date.slice(0,props.eventData.date.length-8));
   const [description, setDescription] = useState(props.eventData.description);
   const [locName, setLocName] = useState(props.eventData.locName ? props.eventData.locName : props.eventData.locname);
   let autocomplete = null;
   console.log(props.eventData);
 
-  // "2023-03-09T00:52:00.000Z" database format
-  // 2023-03-08T19:52 date format
+  // "2023-03-22T20:21:00.000Z" database format
+  // 2023-03-22T20:21 date format
+  // Wed, 22 Mar 2023 20:21:00 GMT
+  // props.eventData.date.slice(0,props.eventData.date.length-8)
 
+  // "023-03-22T20:21"
   // cancel handler
   const cancelHandler = () => {
     props.setUpdating(false);
@@ -44,7 +47,7 @@ export default function MarkerUpdator(props) {
     try {
       console.log('in MARKER CREATOR user is: ', user.id);
       const { id, email, name: username } = user;
-      // name, address (actual), organizer (name), email, date, description, location (coords), id 
+      // event object for the database
       const event = {
         name,
         address,
@@ -54,6 +57,7 @@ export default function MarkerUpdator(props) {
         userID: id,
         eventID: props.eventData.id
       };
+      // encode the address and geocode it
       const encoded = address.replaceAll(' ', '+');
       const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encoded}&key=AIzaSyBCOm76ZZYuU7YSbYUmDRwhdj8XTW5K5jk`;
       const response = await axios.get(url);
@@ -62,17 +66,22 @@ export default function MarkerUpdator(props) {
         lat: data.geometry.location.lat,
         lng: data.geometry.location.lng,
       }];
+      // send the update request to the database
       const eventID = await axios.put('/api/events', event);
       event.eventID = eventID.data;
       event.email = email;
       event.organizer = username;
+      // update window closes and is replaced with add event
       props.setUpdating(false);
-      // props.setMarkerData(prevMarkerData => {
-      //   console.log('TRYING TO UPDATE STATE ARRAY...');
-      //   console.log('prevMarkerData is ', prevMarkerData);
-      //   console.log('event is: ', event);
-      //   return [...prevMarkerData, event];
-      // });
+      // replace the MarkerData in state with the updated array
+      props.setMarkerData(prevMarkerData => {
+        // remove the edited event
+        const updatedMarkers = prevMarkerData.filter(event => {
+          return event.id !== event.eventID;
+        });
+        // spread in the filtered old events with the new event added in
+        return [...updatedMarkers, event];
+      });
       //console.log('most recent marker is: ', markerData[markerData.length - 1]);
       // email from context and organizer from context
       // get event id to store in state
@@ -81,20 +90,16 @@ export default function MarkerUpdator(props) {
     }
   };
 
+  // autocomplete onLoad
   function onLoad(ac) {
     console.log('here in ONLOAD, ac is: ', ac);
     autocomplete = ac;
   }
 
+  // autocomplete change handler
   function handleChange() {
-    
     console.log('autocomplete is currently: ', autocomplete);
     if(autocomplete !== null) console.log('autocomplete place is: ', autocomplete.getPlace());
-    // if (e !== null) {
-    //   console.log(e.getPlace());
-    // } else {
-    //   console.log('Autocomplete is not loaded yet!');
-    // }
   }
 
   return (
@@ -125,16 +130,13 @@ export default function MarkerUpdator(props) {
           }}
           value={address}
         />
-        {/* <Autocomplete className="autocomplete-container" onLoad={onLoad} onPlaceChanged={handleChange}>
-          <input className="autocomplete-input" type="text" required />
-        </Autocomplete> */}
         <label className="screen-reader-text" htmlFor="event-date">
           Date:
         </label>
         <input placeholder="Date and time" id="event-date" type="datetime-local" onChange={(e) => setDate(e.target.value)} value={date} required />
         <button className="button-primary">Submit</button>
       </form>
-      <button className="button-primary" onClick={cancelHandler}>Cancel</button>
+      <button className="cancel-button button-primary" onClick={cancelHandler}>Cancel</button>
     </div>
   );
 }

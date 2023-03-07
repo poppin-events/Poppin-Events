@@ -4,8 +4,10 @@ body {
   box-sizing: border-box;
   /* border: 2px solid black; */
   font-family: 'Poppins', sans-serif;
-  padding-top: 100px;
-
+  padding-top: 80px;
+  background-image: url('https://img.freepik.com/free-vector/hand-painted-watercolor-pastel-sky-background_23-2148902028.jpg?w=1800&t=st=1678152616~exp=1678153216~hmac=74aded69431c66906454ac1c5b72d32320d4b96356014ce1c1940c26d3ac63e0');
+  /* background-image: url('https://img.freepik.com/free-vector/hand-painted-watercolor-pastel-sky-background_23-2148907305.jpg?w=1800&t=st=1678154913~exp=1678155513~hmac=44702a3d2aa26d460c8370341bc0e322a074f8db5bbc40d4e66a21232954148f'); */
+  background-size: cover;
 }
 
 button, input {
@@ -15,7 +17,13 @@ button, input {
 button {
   cursor: pointer;
 }
-
+.edit-button, .delete-button {
+  width: 100px;
+  height: 30px;
+}
+.edit-button {
+  margin-right: 10px;
+}
 #root {
   /* border: 5px solid red; */
   width: 100%;
@@ -76,11 +84,12 @@ button {
   padding-top: 10px;
   border-radius: 5px;
   width: 300px;
+
 }
 
 .button-primary {
-  padding: 13px 0;
-  width: 60%;
+  padding: 12px 0;
+  width: 50%;
   margin-top: 5px;
 }
 
@@ -95,16 +104,25 @@ button {
 .create-form input {
   border: none;
   outline: none;
-  border-bottom: 1px solid lightgray;
+  border-bottom: 1px solid rgb(126, 126, 126);
   text-align: center;
   margin-bottom: 18px;
   font-size: 15px;
   width: 85%;
-
-
+  background: none;
 }
 
 
+
+.brand-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.brand-logo {
+  width: 40px;
+}
 
 /* .autocomplete-container {
   display: inline-block;
@@ -139,8 +157,8 @@ button {
 
 
 .navbar {
-  background: lightgray;
-  opacity: .7;
+  background: rgb(234, 248, 255);
+  opacity: .5;
   position: fixed;
   top: 0;
   width: 100%;
@@ -148,6 +166,7 @@ button {
   justify-content: space-between;
   align-items: center;
   z-index: 200;
+  height: 60px;
 }
 
 .nav-list {
@@ -168,6 +187,12 @@ a:hover {
 
 .brand-heading {
   margin-left: 20px;
+  display: inline-block;
+  font-style: italic;
+  /* text-decoration: underline; */
+  font-weight: 800;
+  font-size: 28px;
+  color: rgb(136, 54, 244);
 }
 
 .map-section {
@@ -187,3 +212,16 @@ a:hover {
   padding: 10px;
 }
 
+button {
+  background: none;
+  border-radius: 3px;
+  border: 1px solid rgb(126, 126, 126);
+  transition: .15s ease;
+}
+button:hover {
+  background: rgba(246, 255, 238, 0.853);
+}
+
+.delete-button:hover, .cancel-button:hover{
+  background: rgba(255, 209, 220, 0.453);
+}
