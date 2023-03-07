@@ -1,5 +1,5 @@
 // import the user model
-const jwt_decode = require('jwt-decode');
+const jwt_decode = require('jwt-decode'); // ended up only using jwt_decode on front end
 const db = require('../models/dbModel');
 
 const userController = {};

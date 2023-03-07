@@ -27,6 +27,7 @@ function Map() {
   // Load the script for google maps API
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
+    // we don't think this is actually used, but removing it breaks EVERYTHING?!
     libraries: ['places'],
   });
 
@@ -40,7 +41,7 @@ function Map() {
       };
       getEvents();
       // get current user location and set the center of the map to that location
-      if (navigator.geolocation) {
+      if (navigator.geolocation) { // native browser geolocation functionality
         navigator.geolocation.getCurrentPosition(
           (position) => {
             const pos = {
@@ -86,8 +87,8 @@ function Map() {
       userID: uID,
     };
     // send object to the server to delete the event
-    const response = await axios.delete('/api/events', {
-      data: { deleteReq }});
+    const response = await axios.delete('/api/events/', { // yeah, not restful, oh well sowee >.<
+      data: { deleteReq } });
     // filter the removed event from the marker data array
     setMarkerData(prevMarkerData => {
       return prevMarkerData.filter(event => {
@@ -97,9 +98,13 @@ function Map() {
     setEventData(null);
   };
 
-  if (!isLoaded) return <div>Loading...</div>;
-
+  // ensures that a div exists for the map even when the map API key is not loaded successfully. DO NOT DELETE
+  if (!isLoaded) return <div>Loading... 🥺</div>;
   // <GoogleMap><GoogleMap /> component imported from @react-google-maps/api used to render google maps
+  // https://react-google-maps-api-docs.netlify.app/#googlemap
+
+
+// yes ... we know that this could be refactored into multiple components but .... time
   return (
     <div className="map-section">
       <GoogleMap

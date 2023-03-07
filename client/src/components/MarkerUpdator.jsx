@@ -3,15 +3,6 @@ import axios from 'axios';
 import { useJsApiLoader } from '@react-google-maps/api';
 import { UserContext } from './UserContext';
 import Autocomplete from 'react-google-autocomplete';
-/*
-  Title
-  Creator name
-  location as address
-  date
-  description
-*/
-
-// let url = `https://maps.googleapis.com/maps/api/geocode/json?address=${URLencoded autocomplete address}}&key=${import.meta.env.VITE_GOOGLE_MAPS_API_KEY}`
 
 const libraries = ['places'];
 export default function MarkerUpdator(props) {
@@ -33,7 +24,8 @@ export default function MarkerUpdator(props) {
   // "2023-03-22T20:21:00.000Z" database format
   // 2023-03-22T20:21 date format
   // Wed, 22 Mar 2023 20:21:00 GMT
-  // props.eventData.date.slice(0,props.eventData.date.length-8)
+  // props.eventData.date.slice(0,props.eventData.date.length-8) 
+  // graveyard of broken souls
 
   // "023-03-22T20:21"
   // cancel handler
@@ -59,7 +51,7 @@ export default function MarkerUpdator(props) {
       };
       // encode the address and geocode it
       const encoded = address.replaceAll(' ', '+');
-      const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encoded}&key=AIzaSyBCOm76ZZYuU7YSbYUmDRwhdj8XTW5K5jk`;
+      const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encoded}&key=${import.meta.env.VITE_GOOGLE_MAPS_API_KEY}`;
       const response = await axios.get(url);
       const data = response.data.results[0];
       event.location = [{
@@ -71,17 +63,18 @@ export default function MarkerUpdator(props) {
       event.eventID = eventID.data;
       event.email = email;
       event.organizer = username;
-      // update window closes and is replaced with add event
-      props.setUpdating(false);
       // replace the MarkerData in state with the updated array
       props.setMarkerData(prevMarkerData => {
         // remove the edited event
+        // could make more performant with map instead of filter
         const updatedMarkers = prevMarkerData.filter(event => {
           return event.id !== event.eventID;
         });
         // spread in the filtered old events with the new event added in
         return [...updatedMarkers, event];
       });
+      // update window closes and is replaced with add event
+      props.setUpdating(false);
       //console.log('most recent marker is: ', markerData[markerData.length - 1]);
       // email from context and organizer from context
       // get event id to store in state

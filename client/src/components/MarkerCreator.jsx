@@ -12,7 +12,7 @@ export default function MarkerCreator(props) {
   });
 
   const { user } = useContext(UserContext);
-  // state
+  // state for controlled inputs
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
   const [date, setDate] = useState('');
@@ -37,8 +37,8 @@ export default function MarkerCreator(props) {
       };
       // encode the address
       const encoded = address.replaceAll(' ', '+');
-      const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encoded}&key=AIzaSyBCOm76ZZYuU7YSbYUmDRwhdj8XTW5K5jk`;
-      // geocode the address
+      // geocode the address (https://developers.google.com/maps/documentation/geocoding/requests-geocoding)
+      const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encoded}&key=${import.meta.env.VITE_GOOGLE_MAPS_API_KEY}`;
       const response = await axios.get(url);
       const data = response.data.results[0];
       event.location = [{
@@ -51,7 +51,7 @@ export default function MarkerCreator(props) {
       event.id = eventID.data.id;
       event.email = email;
       event.organizer = username;
-      // add the new event into state to rerender the map
+      // add the new event into state (from parent component) to rerender the map + markers
       props.setMarkerData(prevMarkerData => {
         return [...prevMarkerData, event];
       });
@@ -94,7 +94,7 @@ export default function MarkerCreator(props) {
         </label>
         <Autocomplete
           apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}
-          options={{ types: [] }}
+          options={{ types: [] }} // empty array means select all types
           onPlaceSelected={(place) => {
             console.log('PLACE in autocomplete IS: ', place);
             setAddress(place.formatted_address);

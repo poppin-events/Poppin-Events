@@ -2,11 +2,9 @@ body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  /* border: 2px solid black; */
   font-family: 'Poppins', sans-serif;
   padding-top: 80px;
   background-image: url('https://img.freepik.com/free-vector/hand-painted-watercolor-pastel-sky-background_23-2148902028.jpg?w=1800&t=st=1678152616~exp=1678153216~hmac=74aded69431c66906454ac1c5b72d32320d4b96356014ce1c1940c26d3ac63e0');
-  /* background-image: url('https://img.freepik.com/free-vector/hand-painted-watercolor-pastel-sky-background_23-2148907305.jpg?w=1800&t=st=1678154913~exp=1678155513~hmac=44702a3d2aa26d460c8370341bc0e322a074f8db5bbc40d4e66a21232954148f'); */
   background-size: cover;
 }
 
@@ -25,10 +23,7 @@ button {
   margin-right: 10px;
 }
 #root {
-  /* border: 5px solid red; */
   width: 100%;
-  /* height: 100%; */
-  /* border: 10px solid orange; */
   display: flex;
   flex-direction: column;
   align-items: center;

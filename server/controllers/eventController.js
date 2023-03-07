@@ -7,8 +7,10 @@ const eventController = {};
 // get all events from database
 eventController.getEvents = async (req, res, next) => {
   try {
+    // select event information, using jsonb_agg to create a json object out of lat and lng by declaring key/value pairs
     const query = await db.query('SELECT e.id, e.name, e.description, e.date, e.loc_name AS locName, e.address, jsonb_agg(json_build_object(\'lat\', e.lat, \'lng\', e.lng)) AS location, u.name AS organizer, u.email, u.picture FROM events e LEFT OUTER JOIN users u ON e.organizer_id = u.id group by e.id, u.name, u.email, u.picture');
     res.locals.events = query.rows;
+    // query shape: {something: x, rows:[{data}, {data2}], blah: y, ....}
     return next();
   } catch (error) {
     return next({
@@ -28,6 +30,7 @@ eventController.createEvent = async (req, res, next) => {
     const addEventQuery = 'INSERT INTO events (name, description, date, loc_name, address, lat, lng, organizer_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id';
     const newEventVals = [name, description, date, locName, address, lat, lng, userID];
     const newEvent = await db.query(addEventQuery, newEventVals);
+    // **note - that rows[0] will actually be an OBJECT containing {id: <some number>} ** !
     res.locals.id = newEvent.rows[0];
     return next();
   } catch (error) {
@@ -45,7 +48,7 @@ eventController.updateEvent = async (req, res, next) => {
   } = req.body;
   const { lat, lng } = req.body.location[0];
   const values = [name, description, date, locName, address, lat, lng, userID, eventID];
-  const text = 'UPDATE events SET name = $1, description = $2, date = $3, loc_name = $4, address = $5, lat = $6, lng = $7 WHERE organizer_id = $8 AND id = $9 RETURNING id';
+  const text = 'UPDATE events SET name = $1, description = $2, date = $3, loc_name = $4, address = $5, lat = $6, lng = $7 WHERE organizer_id = $8 AND id = $9;';
   try {
     await db.query(text, values);
     return next();
