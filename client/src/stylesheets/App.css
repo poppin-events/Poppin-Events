@@ -1,42 +1,222 @@
-.App {
-  text-align: center;
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+  padding-top: 80px;
+  background-image: url('https://img.freepik.com/free-vector/hand-painted-watercolor-pastel-sky-background_23-2148902028.jpg?w=1800&t=st=1678152616~exp=1678153216~hmac=74aded69431c66906454ac1c5b72d32320d4b96356014ce1c1940c26d3ac63e0');
+  background-size: cover;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+button, input {
+  font-family: 'Poppins', sans-serif;
 }
 
 button {
-  font-size: calc(10px + 2vmin);
+  cursor: pointer;
+}
+.edit-button, .delete-button {
+  width: 100px;
+  height: 30px;
+}
+.edit-button {
+  margin-right: 10px;
+}
+#root {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+* {
+  /* outline: 1px solid lime; */
+}
+
+.info-list {
+  list-style: none;
+}
+
+.info-container {
+  /* outline: 2px solid black; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: min-content;
+  text-align: center;
+  padding: 20px;
+  min-width: 300px;
+  margin-top: 20px;
+}
+.event-title {
+  margin-top: -4px;
+}
+.event-description {
+  font-style: italic;
+  margin: -3px 0;
+}
+.map-container {
+
+  min-width: 700px;
+  min-height: 700px;
+  margin: 0 30px;
+}
+
+.box-shadow-1 {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), -1px 6px 9px rgba(0, 0, 0, 0.24);
+  transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
+}
+
+.box-shadow-1:hover {
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+}
+
+.create-event-container {
+  text-align: center;
+  /* outline: 1px solid gray; */
+  height: min-content;
+  padding: 20px;
+  padding-top: 10px;
+  border-radius: 5px;
+  width: 300px;
+
+}
+
+.button-primary {
+  padding: 12px 0;
+  width: 50%;
+  margin-top: 5px;
+}
+
+.create-form {
+  display: flex;
+  flex-direction: column;
+  /* width: 300px; */
+  /* outline: 1px solid gray; */
+  align-items: center;
+}
+
+.create-form input {
+  border: none;
+  outline: none;
+  border-bottom: 1px solid rgb(126, 126, 126);
+  text-align: center;
+  margin-bottom: 18px;
+  font-size: 15px;
+  width: 85%;
+  background: none;
+}
+
+
+
+.brand-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.brand-logo {
+  width: 40px;
+}
+
+/* .autocomplete-container {
+  display: inline-block;
+  width: 100%;
+} */
+.autocomplete-container {
+  /* outline: 2px solid red; */
+  /* background: blue; */
+  width: 100%;
+}
+.autocomplete-container .autocomplete-input {
+  /* background: red; */
+  /* width: 98%;
+  display: inline-block; */
+
+}
+
+
+
+.screen-reader-text {
+  border: 0;
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: inset(50%);
+  height: 1px;
+  margin: -1px;
+  width: 1px;
+  overflow: hidden;
+  position: absolute !important;
+  word-wrap: normal !important;
+}
+
+
+
+.navbar {
+  background: rgb(234, 248, 255);
+  opacity: .5;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 200;
+  height: 60px;
+}
+
+.nav-list {
+  display: flex;
+  list-style: none;
+}
+.nav-list li{
+  margin-right: 20px;
+}
+
+a {
+  cursor: pointer;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.brand-heading {
+  margin-left: 20px;
+  display: inline-block;
+  font-style: italic;
+  /* text-decoration: underline; */
+  font-weight: 800;
+  font-size: 28px;
+  color: rgb(136, 54, 244);
+}
+
+.map-section {
+  /* outline: 2px solid gold; */
+  display: flex;
+  width: 80%;
+
+}
+
+
+
+.current-location-button {
+  position: absolute;
+  top: 9px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 10px;
+}
+
+button {
+  background: none;
+  border-radius: 3px;
+  border: 1px solid rgb(126, 126, 126);
+  transition: .15s ease;
+}
+button:hover {
+  background: rgba(246, 255, 238, 0.853);
+}
+
+.delete-button:hover, .cancel-button:hover{
+  background: rgba(255, 209, 220, 0.453);
 }
