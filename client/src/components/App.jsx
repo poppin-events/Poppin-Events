@@ -24,6 +24,7 @@ function App(props) {
             name: userInfo.data.name,
             email: userInfo.data.email,
             picture: userInfo.data.picture,
+            // for later: refactor to be userID instead of id
             id: userInfo.data.id,
           });
           navigate('/map');
@@ -58,7 +59,7 @@ function App(props) {
   return (
     <>
       <nav className="navbar">
-        <h1 className="brand-heading">Locale Events</h1>
+        <h1 className="brand-heading">Poppin</h1>
         {user &&
           <ul className="nav-list">
             <li> <a onClick={logout}> Logout </a></li>
