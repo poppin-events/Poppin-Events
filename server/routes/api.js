@@ -30,7 +30,7 @@ router.get(
 router.post(
   '/events',
   eventController.createEvent,
-  (req, res) => res.sendStatus(200),
+  (req, res) => res.status(200).json(res.locals.id),
 );
 
 // Update an event in the database

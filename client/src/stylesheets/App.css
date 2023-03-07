@@ -34,11 +34,29 @@ button {
   list-style: none;
 }
 
+.info-container {
+  /* outline: 2px solid black; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: min-content;
+  text-align: center;
+  padding: 20px;
+  min-width: 300px;
+  margin-top: 20px;
+}
+.event-title {
+  margin-top: -4px;
+}
+.event-description {
+  font-style: italic;
+  margin: -3px 0;
+}
 .map-container {
 
   min-width: 700px;
   min-height: 700px;
-
+  margin: 0 30px;
 }
 
 .box-shadow-1 {
@@ -57,6 +75,7 @@ button {
   padding: 20px;
   padding-top: 10px;
   border-radius: 5px;
+  width: 300px;
 }
 
 .button-primary {
@@ -68,7 +87,7 @@ button {
 .create-form {
   display: flex;
   flex-direction: column;
-  width: 300px;
+  /* width: 300px; */
   /* outline: 1px solid gray; */
   align-items: center;
 }
@@ -128,6 +147,7 @@ button {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  z-index: 200;
 }
 
 .nav-list {
@@ -154,7 +174,7 @@ a:hover {
   /* outline: 2px solid gold; */
   display: flex;
   width: 80%;
-  justify-content: space-evenly;
+
 }
 
 
