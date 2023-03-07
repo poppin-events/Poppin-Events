@@ -1,6 +1,6 @@
 import '../stylesheets/App.css';
 import React, { useState, useEffect, useContext} from 'react';
-import { GoogleMap, useJsApiLoader, MarkerF, Autocomplete} from '@react-google-maps/api';
+import { GoogleMap, useJsApiLoader, MarkerF } from '@react-google-maps/api';
 
 import axios from 'axios';
 import MarkerCreator from './MarkerCreator';
@@ -8,23 +8,29 @@ import MarkerUpdator from './MarkerUpdator';
 import { UserContext } from './UserContext';
 
 function Map() {
+  // state for map center positioning
   const [mapPos, setMapPos] = useState({ lat: 0.37766641e2, lng: -0.123098308e3 });
+
+  // state for the data for marker from the database
   const [markerData, setMarkerData] = useState([]);
+
+  // state to display the event data to the page after clicking a marker
   const [eventData, setEventData] = useState(null);
+
+  // get the userID from the context
+  // userID is used to determine if the user is the creator of the event
   const { user } = useContext(UserContext);
-  // const [map, setMap] = useState(null);
   const [updating, setUpdating] = useState(false);
+  // in-the-works refactor to clarify userID vs eventID from .id
   const userID = user === null ? null : user.id;
 
-  console.log('in MAP at TOP .... user is: ', user);
-  console.log('in MAP at TOP .... eventData is: ', eventData);
-
+  // Load the script for google maps API
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
     libraries: ['places'],
   });
 
-  // get all markers from database
+  // get all marker data from database on mount
   useEffect(() => {
     try {
       const getEvents = async () => {
@@ -33,6 +39,7 @@ function Map() {
         setMarkerData(data);
       };
       getEvents();
+      // get current user location and set the center of the map to that location
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
           (position) => {
@@ -50,6 +57,7 @@ function Map() {
     }
   }, []);
 
+  // change google map position to current user location on button click
   const currPosition = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -65,23 +73,21 @@ function Map() {
     }
   };
 
+  // handle click on update button
   const handleUpdate = () => {
     setUpdating(true);
   };
 
+  // handle click on delete button
   const handleDelete = async (eID, uID) => {
     // create the object for the db query on backend
     const deleteReq = {
       eventID: eID,
       userID: uID,
     };
-    // const test = {hi: 'hi'};
-    // send object to the server
-    console.log('eID is : ', eID);
-    console.log('uID is : ', uID);
+    // send object to the server to delete the event
     const response = await axios.delete('/api/events', {
       data: { deleteReq }});
-    // await axios.delete('/api/events', {data: deleteReq, headers:{Authorization: "token"}})
     // filter the removed event from the marker data array
     setMarkerData(prevMarkerData => {
       return prevMarkerData.filter(event => {
@@ -91,11 +97,9 @@ function Map() {
     setEventData(null);
   };
 
-  console.log('RERENDERING MAP NOW');
-  console.log('IN MAP, markerdata STATE ARRAY IS: ', markerData);
-
   if (!isLoaded) return <div>Loading...</div>;
 
+  // <GoogleMap><GoogleMap /> component imported from @react-google-maps/api used to render google maps
   return (
     <div className="map-section">
       <GoogleMap
@@ -104,6 +108,8 @@ function Map() {
         mapContainerClassName="map-container box-shadow-1"
       >
         <button className="current-location-button" onClick={() => currPosition()}>Go to current location</button>
+        {/* If markerData is changed, places corresponding Markers in the map */}
+        {/* <MarkerF/> component imported from @react-google-maps/api renders markers on the map */}
         {markerData.length > 0 && markerData.map((event) => (
           <MarkerF
             key={event.id}
@@ -113,6 +119,7 @@ function Map() {
           />
         ))}
       </GoogleMap>
+      {/* If a Marker is being added, call MarkerCreator and if updated, call MarkerUpdator */}
       <div className="right-section">
         {!updating && <MarkerCreator setMarkerData={setMarkerData} />}
         {updating
@@ -121,27 +128,27 @@ function Map() {
             eventData={eventData}
             setEventData={setEventData}
             setUpdating={setUpdating}
+            setMarkerData={setMarkerData}
           />
           )}
-      
+        {/* If eventData and user are not null, display the event data */}
         {
-          eventData &&
+          eventData && user &&
           (
             <div className="info-container box-shadow-1">
-
-  
               <h2 className="event-title">{eventData.name}</h2>
               <p className="event-description"> {eventData.description}</p>
               <ul className="info-list">
                 <li className="info-list-item">Organizer: {eventData.organizer}</li>
                 <li className="info-list-item">Location: {eventData.address}</li>
-                <li className="info-list-item">Date: {(new Date(eventData.date)).toUTCString()}</li>
+                <li className="info-list-item">Date: {(new Date(eventData.date)).toLocaleString()}</li>
                 <li className="info-list-item">RSVP: {eventData.email}</li>
               </ul>
+              {/* If the user is the creator of the event, display the edit and delete buttons */}
               {
                 eventData.email === user.email && (
                   <div className="event-buttons-container">
-                    <button className="edit-button" type="button" onClick={handleUpdate}> Edit </button>
+                    <button className="edit-button " type="button" onClick={handleUpdate}> Edit </button>
                     <button className="delete-button" type="button" onClick={() => handleDelete(eventData.id, user.id)}> Delete </button>
                   </div>
                 )

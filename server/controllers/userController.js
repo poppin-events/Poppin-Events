@@ -4,16 +4,6 @@ const db = require('../models/dbModel');
 
 const userController = {};
 
-// decode jwt data for the requester's email
-// userController.getInfo = (req, res, next) => {
-//   console.log(req.body);
-//   // parse the jwt from the body of the request
-//   const {name, email} = jwt_decode(req.body.jwt);
-//   res.locals.email = token.email;
-//   res.locals.name = token.name;
-//   return next();
-// };
-
 // get user info from database
 userController.login = async (req, res, next) => {
   try {
@@ -21,9 +11,7 @@ userController.login = async (req, res, next) => {
     const { name, email, picture } = req.body;
     const query = `SELECT * FROM users WHERE email = '${email}'`;
     const user = await db.query(query);
-    // console.log(`response from database on login for ${email} is: `, user.rows);
     // if the user does not exist in the database, create them
-    // console.log('picture from JWT is: ', picture);
     const userVals = [name, email, picture];
     if (user.rows.length) res.locals.id = user.rows[0].id;
     if (user.rows.length === 0) {

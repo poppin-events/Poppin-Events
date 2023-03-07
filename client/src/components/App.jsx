@@ -59,7 +59,10 @@ function App(props) {
   return (
     <>
       <nav className="navbar">
-        <h1 className="brand-heading">Poppin</h1>
+        <span className="brand-container">
+          <h1 className="brand-heading">Poppin</h1>
+          <img className="brand-logo" src="https://i.pinimg.com/originals/2f/c1/b8/2fc1b8f82e14172e3bcae39ca8c8ab33.gif"></img>
+        </span>
         {user &&
           <ul className="nav-list">
             <li> <a onClick={logout}> Logout </a></li>
