@@ -4,12 +4,13 @@ body {
   box-sizing: border-box;
   font-family: 'Poppins', sans-serif;
   padding-top: 80px;
-  background-image: url('https://img.freepik.com/free-vector/hand-painted-watercolor-pastel-sky-background_23-2148902028.jpg?w=1800&t=st=1678152616~exp=1678153216~hmac=74aded69431c66906454ac1c5b72d32320d4b96356014ce1c1940c26d3ac63e0');
+  background-color: #1B1B31;
   background-size: cover;
 }
 
 button, input {
   font-family: 'Poppins', sans-serif;
+  color:white;
 }
 
 button {
@@ -79,6 +80,7 @@ button {
   padding-top: 10px;
   border-radius: 5px;
   width: 300px;
+  color:white;
 
 }
 
@@ -135,6 +137,18 @@ button {
 
 }
 
+input:focus::placeholder {
+  color: transparent;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    transition: background-color 5000s ease-in-out 0s;
+    -webkit-text-fill-color: white !important;
+}
+
 
 
 .screen-reader-text {
@@ -147,13 +161,14 @@ button {
   overflow: hidden;
   position: absolute !important;
   word-wrap: normal !important;
+  /* color:white; */
 }
 
 
 
 .navbar {
   background: rgb(234, 248, 255);
-  opacity: .5;
+  /* opacity: .5; */
   position: fixed;
   top: 0;
   width: 100%;
@@ -197,8 +212,6 @@ a:hover {
 
 }
 
-
-
 .current-location-button {
   position: absolute;
   top: 9px;
@@ -212,11 +225,18 @@ button {
   border-radius: 3px;
   border: 1px solid rgb(126, 126, 126);
   transition: .15s ease;
+  color:white;
 }
 button:hover {
   background: rgba(246, 255, 238, 0.853);
+  color:black;
 }
 
 .delete-button:hover, .cancel-button:hover{
   background: rgba(255, 209, 220, 0.453);
+}
+
+#event-date{
+  color:white;
+  color-scheme: dark;
 }
