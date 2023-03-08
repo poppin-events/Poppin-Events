@@ -12,6 +12,8 @@ const app = express();
 // request parsing (if needed)
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// start session
 app.use(session({
   secret: 'af168f987f1gh78fhg91f',
   name: 'ssid',
