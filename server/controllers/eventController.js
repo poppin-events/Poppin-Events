@@ -41,6 +41,7 @@ eventController.createEvent = async (req, res, next) => {
       lng,
       userID,
     ];
+    console.log('hello we made it here');
     const newEvent = await db.query(addEventQuery, newEventVals);
     // **note - that rows[0] will actually be an OBJECT containing {id: <some number>} ** !
     res.locals.id = newEvent.rows[0];
@@ -94,6 +95,32 @@ eventController.deleteEvent = async (req, res, next) => {
     return next({
       log: 'eventController.deleteEvent error',
       message: { err: 'Error deleting event from database' },
+    });
+  }
+};
+
+eventController.getUsersEvents = async (req, res, next) => {
+  // console.log('res.locals.addedAttendee is', res.locals.addedAttendee);
+  // console.log('WHY ARE YOU NOT PRINTING');
+  let onlyEvents = [];
+  const { userID } = req.body;
+  const getUsersQuery = 'SELECT events_id FROM attendees WHERE users_id = ($1)';
+  const values = [ userID ];
+  try {
+    console.log('req.body: ', req.body);
+    const usersEvents = await db.query(getUsersQuery, values);
+    console.log('usersEvents is', usersEvents);
+    usersEvents.rows.map((event) => {
+      onlyEvents.push(event.events_id);
+      return onlyEvents;
+     })
+    console.log(onlyEvents);
+    res.locals.usersEvents = onlyEvents;
+    return next();
+  } catch (error) {
+    return next({
+      log: 'eventController.getUsersEvents error',
+      message: { err: 'Error getting all of users events from database' },
     });
   }
 };
