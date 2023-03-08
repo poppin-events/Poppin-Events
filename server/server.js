@@ -12,11 +12,13 @@ const app = express();
 // request parsing (if needed)
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(session({
-  secret: 'af168f987f1gh78fhg91f',
-  name: 'ssid',
-  saveUninitialized: false,
-}));
+app.use(
+  session({
+    secret: 'af168f987f1gh78fhg91f',
+    name: 'ssid',
+    saveUninitialized: false,
+  })
+);
 // handle requests for static files
 app.use(express.static(path.resolve(__dirname, '../dist')));
 // route handlers

@@ -5,8 +5,7 @@ import React, { useState, useEffect } from 'react';
 import jwt_decode from 'jwt-decode';
 import Login from './Login';
 import { UserContext } from './UserContext';
-import {Routes, Route, useNavigate} from 'react-router-dom';
-
+import { Routes, Route, useNavigate } from 'react-router-dom';
 
 function App(props) {
   const navigate = useNavigate();
@@ -28,8 +27,7 @@ function App(props) {
             id: userInfo.data.id,
           });
           navigate('/map');
-        }
-        else navigate('login');
+        } else navigate('login');
       } catch (e) {
         console.log('Error in checkSession: ', e.message);
       }
@@ -37,8 +35,7 @@ function App(props) {
     if (user === null) {
       console.log('user is null');
       checkSession();
-    }
-    else {
+    } else {
       console.log('user is not null');
       navigate('/map');
     }
@@ -53,39 +50,42 @@ function App(props) {
     } catch (e) {
       console.log('error logging out: ', e.message);
     }
-  }
-
+  };
 
   return (
     <>
       <nav className="navbar">
         <span className="brand-container">
           <h1 className="brand-heading">Poppin</h1>
-          <img className="brand-logo" src="https://i.pinimg.com/originals/2f/c1/b8/2fc1b8f82e14172e3bcae39ca8c8ab33.gif"></img>
+          <img
+            className="brand-logo"
+            src="https://i.pinimg.com/originals/2f/c1/b8/2fc1b8f82e14172e3bcae39ca8c8ab33.gif"
+          ></img>
         </span>
-        {user &&
+        {user && (
           <ul className="nav-list">
-            <li> <a onClick={logout}> Logout </a></li>
+            <li>
+              {' '}
+              <a onClick={logout}> Logout </a>
+            </li>
             <li>{user.name}</li>
           </ul>
-        }
+        )}
       </nav>
-      
-      <UserContext.Provider value={{user}}>
+
+      <UserContext.Provider value={{ user }}>
         <Routes>
           <Route
-            path='/login'
-            element={<Login setUser={(u) => setUser(u)}
-            setUserJWT={(jwt) => setUserJWT(jwt)}></Login>}
+            path="/login"
+            element={
+              <Login
+                setUser={(u) => setUser(u)}
+                setUserJWT={(jwt) => setUserJWT(jwt)}
+              ></Login>
+            }
           />
-          <Route
-            path='/'
-            element={<p>you are on path= /</p>}
-          />
-          <Route
-            path="/map"
-            element={<Map />}
-          />
+          <Route path="/" element={<p>you are on path= /</p>} />
+          <Route path="/map" element={<Map />} />
         </Routes>
       </UserContext.Provider>
     </>
