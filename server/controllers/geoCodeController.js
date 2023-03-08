@@ -3,16 +3,16 @@ const geocodeController = {};
 geocodeController.reverseGeocode = (req, res, next) => {
   // variables to use
   const { lat, lng } = req.params;
-  console.log('lat: ', lat);
-  console.log('lng: ', lng);
+  // console.log('lat: ', lat);
+  // console.log('lng: ', lng);
   const { VITE_GOOGLE_MAPS_API_KEY } = process.env;
-  console.log('VITE_GOOGLE_MAPS_API_KEY', VITE_GOOGLE_MAPS_API_KEY);
+  // console.log('VITE_GOOGLE_MAPS_API_KEY', VITE_GOOGLE_MAPS_API_KEY);
 
   // fetch from Google Geocode API
   fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${VITE_GOOGLE_MAPS_API_KEY}`)
     .then((response) => response.json())
     .then((locationData) => {
-      console.log('locationData: ', locationData);
+      // console.log('locationData: ', locationData);
 
       for (let i = 0; i < locationData.results[0].address_components.length; i += 1) {
         locationData.results[0].address_components[i].types.forEach((type) => {
