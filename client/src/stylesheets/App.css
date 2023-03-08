@@ -15,7 +15,7 @@ button, input {
 button {
   cursor: pointer;
 }
-.edit-button, .delete-button {
+.edit-button, .delete-button, .rsvp-button {
   width: 100px;
   height: 30px;
 }
