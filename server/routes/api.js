@@ -2,6 +2,8 @@ const express = require('express');
 const userController = require('../controllers/userController');
 const eventController = require('../controllers/eventController');
 const sessionController = require('../controllers/sessionController');
+const tmEventController = require('../controllers/tmEventController');
+const geocodeController = require('../controllers/geocodeController');
 
 const router = express.Router();
 
@@ -45,6 +47,15 @@ router.delete(
   '/events',
   eventController.deleteEvent,
   (req, res) => res.sendStatus(200),
+);
+
+// GET all the events in a specific area from Ticketmaster API
+router.get(
+  '/ticketmaster/:lat/:lng',
+  geocodeController.reverseGeocode,
+  // (req, res) => res.status(200).json(res.locals),
+  tmEventController.getEvents,
+  (req, res) => res.status(200).json(res.locals.events),
 );
 
 // Checks for active sessions
