@@ -7,8 +7,29 @@ const eventController = {};
 // get all events from database
 eventController.getEvents = async (req, res, next) => {
   try {
-    // select event information, using jsonb_agg to create a json object out of lat and lng by declaring key/value pairs
-    const query = await db.query('SELECT e.id, e.name, e.description, e.date, e.loc_name AS locName, e.address, jsonb_agg(json_build_object(\'lat\', e.lat, \'lng\', e.lng)) AS location, u.name AS organizer, u.email, u.picture FROM events e LEFT OUTER JOIN users u ON e.organizer_id = u.id group by e.id, u.name, u.email, u.picture');
+    /* select event information,
+    using jsonb_agg to create a json object out of lat and lng by declaring key/value pairs */
+    const query = await db.query(
+      `SELECT e.id, 
+        e.name, 
+        e.description, 
+        e.date, 
+        e.loc_name AS locName, 
+        e.address, 
+        jsonb_agg(json_build_object(\'lat\', e.lat, \'lng\', e.lng)) AS location, 
+        e.end_date,
+        e.image_url,
+        e.ticketmaster_evt_id,
+        e.evt_origin_type_id,
+        u.name AS organizer, 
+        u.email, 
+        u.picture 
+        FROM events e 
+          LEFT OUTER JOIN users u 
+            ON e.organizer_id = u.id 
+        WHERE e.evt_origin_type_id = 1
+        GROUP BY e.id, u.name, u.email, u.picture`
+    );
     res.locals.events = query.rows;
     // query shape: {something: x, rows:[{data}, {data2}], blah: y, ....}
     return next();
