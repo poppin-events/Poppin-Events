@@ -28,43 +28,55 @@ attendeeController.addAttendee = async (req, res, next) => {
 
 // gets the list of attendees for an event, returning their 
 attendeeController.getAttendees = async (req, res, next) => {
+  console.log('WILL THIS PRINT FOR GODS SAKE');
   const { eventID } = req.params;
-  const { userID } = req.body;
-  const query = 'SELECT * FROM users WHERE id IN (SELECT users_id FROM attendees WHERE events_id = ($1)'
-  const values = [eventID];
+
+  const query = 'SELECT * FROM users WHERE id IN (SELECT users_id FROM attendees WHERE events_id = ($1))';
+  const value = [+eventID];
 
   try {
-    const response = await db.query(query, values);
-    console.log('response is', response);
-    // at this point response should be an array of user IDs
-    // from users table, get a list of users where userID is 
+    console.log('SKDJfhakjdhfakjdhf');
+    const response = await db.query(query, value);
+    console.log(response);
+    res.locals.eventsAttendees = response.rows;
     return next();
   } catch (err) {
     return next({
-      log: 'attendeeController.getAttendees error',
+      log: 'error in attendeeController.getAttendees',
       message: {
-        err: err
+        err,
       }
     });
-  };
+  }
+
+  // db.query(query, value)
+  //   .then((data) => {
+  //     res.locals.eventsAttendees = data;
+  //     console.log('line 40');
+  //     return next();
+  //   })
+  //   .catch((err) => {return next({
+  //     log: 'error in attendeeController.getAttendees',
+  //     message: {
+  //       err,
+  //     },
+  //   })});
 };
-
-
 
 // delete attendees from attendee table
-attendeeController.deleteAttendee = async (req, res, next) => {
-  try {
-    const { eventID } = req.params;
-    const deleteQuery = 'DELETE FROM attendees WHERE events_id = ($1)';
-    const values = [ eventID ]
-    await db.query(deleteQuery, values);
-    return next();
-  } catch (error) {
-      return next({
-        log: 'attendeeController.deleteAttendee error',
-        message: { err: 'Error deleting attendee in database'}
-      })
-  }
-};
+// attendeeController.deleteAttendee = async (req, res, next) => {
+//   try {
+//     const { eventID } = req.params;
+//     const deleteQuery = 'DELETE FROM attendees WHERE events_id = ($1)';
+//     const values = [ eventID ]
+//     await db.query(deleteQuery, values);
+//     return next();
+//   } catch (error) {
+//       return next({
+//         log: 'attendeeController.deleteAttendee error',
+//         message: { err: 'Error deleting attendee in database'}
+//       })
+//   }
+// };
 
 module.exports = attendeeController;

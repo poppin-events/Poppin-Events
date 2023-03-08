@@ -52,27 +52,26 @@ router.delete(
 router.post('/attendees/:eventID',
   attendeeController.addAttendee,
   eventController.getUsersEvents,
-  (req, res) => {
-    res.status(200).json(res.locals.usersEvents);
-  },
+  (req, res) => res.status(200).json(res.locals.usersEvents),
 );
 
 // Get the list of attendees for an event
-router.get('/attendees/:eventId',
+router.get('/attendees/:eventID',
   attendeeController.getAttendees,
   (req, res) => {
-    // return the list of attendees to an event
-    res.status(200)
-  },
+    console.log('AHHHHHH');
+    return res.status(200).json(res.locals.eventsAttendees);
+  }
 );
 
-router.delete('/attendees/:eventId',
-  attendeeController.deleteAttendee,
-  (req, res) => {
-    // should we return the deletedAttendee?
-    res.sendStatus(200)
-  },
-);
+// stretch goal
+// router.delete('/attendees/:eventId',
+//   attendeeController.deleteAttendee,
+//   (req, res) => {
+//     // should we return the deletedAttendee?
+//     res.sendStatus(200)
+//   },
+// );
 
 // Checks for active sessions
 router.get(
