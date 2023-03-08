@@ -68,6 +68,9 @@ function App(props) {
               {' '}
               <a onClick={logout}> Logout </a>
             </li>
+            <li>
+              <img src={user.picture} alt="User profile pic" />
+            </li>
             <li>{user.name}</li>
           </ul>
         )}
