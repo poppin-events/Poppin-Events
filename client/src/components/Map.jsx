@@ -6,6 +6,7 @@ import axios from 'axios';
 import MarkerCreator from './MarkerCreator';
 import MarkerUpdator from './MarkerUpdator';
 import { UserContext } from './UserContext';
+import RSVPButton from './RSVPButton.jsx';
 
 function Map() {
   // state for map center positioning
@@ -13,6 +14,9 @@ function Map() {
 
   // state for the data for marker from the database
   const [markerData, setMarkerData] = useState([]);
+
+  // state for event data that user is attending
+  const [userEventData, setUserEventData] = useState(null);
 
   // state to display the event data to the page after clicking a marker
   const [eventData, setEventData] = useState(null);
@@ -39,7 +43,13 @@ function Map() {
         const { data } = response;
         setMarkerData(data);
       };
+      // const getUserEventData = async (userId) => {
+      //   const response = await axios.get('/api/userEventData', {userId});
+      //   const { data } = response;
+      //   setUserEventData(data);
+      // };
       getEvents();
+      // getUserEventData(user.id);
       // get current user location and set the center of the map to that location
       if (navigator.geolocation) { // native browser geolocation functionality
         navigator.geolocation.getCurrentPosition(
@@ -156,6 +166,17 @@ function Map() {
                     <button className="edit-button " type="button" onClick={handleUpdate}> Edit </button>
                     <button className="delete-button" type="button" onClick={() => handleDelete(eventData.id, user.id)}> Delete </button>
                   </div>
+                )
+              }
+              {/* Otherwise, display the RSVP component */}
+              {
+                eventData.email !== user.email && (
+                  <RSVPButton 
+                    user={user} 
+                    eventData={eventData}
+                    setUserEventData={setUserEventData}
+                    setMarkerData={setMarkerData}
+                  />
                 )
               }
             </div>
