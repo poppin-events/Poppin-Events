@@ -1,5 +1,5 @@
 /* eslint-disable react/function-component-definition */
-import React, {useState, useContext} from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FcGoogle } from 'react-icons/fc';
 import { GoogleOAuthProvider } from '@react-oauth/google';
@@ -11,7 +11,6 @@ import axios from 'axios';
 
 const Login = (props) => {
   const navigate = useNavigate();
-
   const responseGoogle = async (response) => {
     // the google oauth (identity services) api responds with a JWT with all user info
     const userObject = jwt_decode(response.credential);

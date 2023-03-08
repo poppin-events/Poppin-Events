@@ -8,6 +8,7 @@ const userController = {};
 userController.login = async (req, res, next) => {
   try {
     // console.log('req body in userController.login', req.body);
+    // grab name
     const { name, email, picture } = req.body;
     const query = `SELECT * FROM users WHERE email = '${email}'`;
     const user = await db.query(query);
