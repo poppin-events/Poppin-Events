@@ -17,7 +17,7 @@ function Map() {
   const [markerData, setMarkerData] = useState([]);
 
   // state for event data that user is attending
-  const [userEventList, setUserEventList] = useState([]);
+  const [userEventList, setUserEventList] = useState([10]);
 
   // state to display the event data to the page after clicking a marker
   const [eventData, setEventData] = useState(null);
@@ -46,15 +46,19 @@ function Map() {
         setMarkerData(data);
       };
 
-      //get all events that user is attending and throw into state
-      // const getUserEventData = async (userId) => {
-      //   const response = await axios.get('/api/userEventList', {userId});
-      //   const { data } = response;
-      //   setUserEventList(data);
-      // };
+      // get all events that user is attending and throw into state
+      const getUserEventData = async (userId) => {
+        try {
+        const response = await axios.get(`/api/userEventList/${userId}`);
+        const { data } = response;
+        setUserEventList(data);
+        } catch (e) {
+          console.log('error in getUserEventData: ', e.message);
+        }
+      };
 
       getEvents();
-      // getUserEventData(user.id);
+      getUserEventData(user.id);
 
       // get current user location and set the center of the map to that location
       if (navigator.geolocation) { // native browser geolocation functionality

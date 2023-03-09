@@ -4,10 +4,10 @@ import axios from 'axios';
 function RSVPButton(props) {
 
   async function handleClick(e) {
-    const messageBody = {eventId: props.eventData.id}
-
+    const messageBody = {userId: props.user.id}
+    console.log('event data id', props.eventData.id)
     try {
-      const response = await axios.post(`/api/attendees/${props.user.id}`, messageBody);
+      const response = await axios.post(`/api/attendees/${props.eventData.id}`, messageBody);
       props.setUserEventList(response.userEventList)
     } catch (err) {
       console.log('error in post: ', err.message);

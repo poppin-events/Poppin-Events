@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext} from 'react';
-import axios from 'axios';
 
 function EventList(props) {
   const userId = props.user.id;
@@ -18,7 +17,11 @@ function EventList(props) {
           month: 'short'
         })
         events.push(
-          <div id={event.id} className='event-list-item' onClick={() => props.setEventData(event)}>
+          <div 
+            key={event.id} 
+            id={event.id} 
+            className='event-list-item' 
+            onClick={() => props.setEventData(event)}>
             <div className='event-list-item-data'>
               <p className='small-titles'>Event</p>
               <p className='small-text'>{event.name}</p>
@@ -36,10 +39,6 @@ function EventList(props) {
       }
     })
   })
-
-  function handleClick(e) {
-    return false;
-  }
 
   return (
     <div className='event-list-cont create-event-container box-shadow-1'>
