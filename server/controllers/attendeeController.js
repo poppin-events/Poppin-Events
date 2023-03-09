@@ -7,14 +7,26 @@ const attendeeController = {};
 attendeeController.addAttendee = async (req, res, next) => {
   // need to get event ID from req.params
   // need to get the user ID from req.body
+  // need to figure out how to manage duplicate entries
   console.log('inside of addAttendee');
   const { eventID } = req.params;
   const { userID } = req.body;
-  const addAttendeeQuery =
-    'INSERT INTO attendees (events_id, users_id) VALUES ($1, $2)'
-  const newAttendeeRow = [ eventID, userID ];
+  // const addAttendeeQuery = 'INSERT INTO attendees (users_id, events_id) VALUES ($1, $2)';
+  const addAttendeeQuery = `
+    INSERT INTO attendees (users_id, events_id) 
+    SELECT $1, $2
+    WHERE NOT EXISTS (
+      SELECT users_id, events_id 
+      FROM attendees 
+      WHERE users_id = $1 AND events_id = $2
+    )
+  `;
+  const newAttendeeRow = [ userID, +eventID ];
+  
   try {
+    console.log('SOMETHING');
     const response = await db.query(addAttendeeQuery, newAttendeeRow);
+    console.log('SOMETHING ELSE');
     console.log('response is', response);
     res.locals.addedAttendee = response;
     return next();

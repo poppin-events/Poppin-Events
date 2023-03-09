@@ -99,22 +99,43 @@ eventController.deleteEvent = async (req, res, next) => {
   }
 };
 
+// getting all the events associated BASED ON PARTICULAR USER
 eventController.getUsersEvents = async (req, res, next) => {
-  // console.log('res.locals.addedAttendee is', res.locals.addedAttendee);
-  // console.log('WHY ARE YOU NOT PRINTING');
-  let onlyEvents = [];
-  const { userID } = req.body;
+  const onlyEvents = [];
+  const { userID } = req.params;
   const getUsersQuery = 'SELECT events_id FROM attendees WHERE users_id = ($1)';
-  const values = [ userID ];
+  const values = [userID];
   try {
-    console.log('req.body: ', req.body);
     const usersEvents = await db.query(getUsersQuery, values);
-    console.log('usersEvents is', usersEvents);
     usersEvents.rows.map((event) => {
       onlyEvents.push(event.events_id);
       return onlyEvents;
-     })
+    });
     console.log(onlyEvents);
+    res.locals.usersEvents = onlyEvents;
+    return next();
+  } catch (error) {
+    return next({
+      log: 'eventController.getUsersEvents error',
+      message: { err: 'Error getting all of users events from database' },
+    });
+  }
+};
+
+// getting all events BASED ON EVENT
+eventController.getEvents = async (req, res, next) => {
+  // console.log('res.locals.addedAttendee is', res.locals.addedAttendee);
+  // console.log('WHY ARE YOU NOT PRINTING');
+  const onlyEvents = [];
+  const { userID } = req.body;
+  const getUsersQuery = 'SELECT events_id FROM attendees WHERE users_id = ($1)';
+  const values = [userID];
+  try {
+    const usersEvents = await db.query(getUsersQuery, values);
+    usersEvents.rows.map((event) => {
+      onlyEvents.push(event.events_id);
+      return onlyEvents;
+    });
     res.locals.usersEvents = onlyEvents;
     return next();
   } catch (error) {
