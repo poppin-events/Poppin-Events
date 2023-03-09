@@ -48,10 +48,15 @@ router.delete(
   (req, res) => res.sendStatus(200),
 );
 
+router.get('/userEventData/:userID',
+  eventController.getUsersEvents,
+  (req, res) => res.status(200).json(res.locals.usersEvents),
+);
+
 // Create an attendee in the database
 router.post('/attendees/:eventID',
   attendeeController.addAttendee,
-  eventController.getUsersEvents,
+  eventController.getEvents,
   (req, res) => res.status(200).json(res.locals.usersEvents),
 );
 
@@ -59,7 +64,6 @@ router.post('/attendees/:eventID',
 router.get('/attendees/:eventID',
   attendeeController.getAttendees,
   (req, res) => {
-    console.log('AHHHHHH');
     return res.status(200).json(res.locals.eventsAttendees);
   }
 );
