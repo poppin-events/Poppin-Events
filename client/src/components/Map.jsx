@@ -7,6 +7,7 @@ import MarkerCreator from './MarkerCreator';
 import MarkerUpdator from './MarkerUpdator';
 import { UserContext } from './UserContext';
 import RSVPButton from './RSVPButton.jsx';
+import EventList from './EventList.jsx';
 
 function Map() {
   // state for map center positioning
@@ -19,7 +20,7 @@ function Map() {
   const [markerData, setMarkerData] = useState([]);
 
   // state for event data that user is attending
-  const [userEventData, setUserEventData] = useState(null);
+  const [userEventList, setUserEventList] = useState([10]);
 
   // state to display the event data to the page after clicking a marker
   const [eventData, setEventData] = useState(null);
@@ -41,18 +42,27 @@ function Map() {
   // get all marker data from database on mount
   useEffect(() => {
     try {
+      // Get all events and throw into state
       const getEvents = async () => {
         const response = await axios.get('/api/events');
         const { data } = response;
         setMarkerData(data);
       };
-      // const getUserEventData = async (userId) => {
-      //   const response = await axios.get('/api/userEventData', {userId});
-      //   const { data } = response;
-      //   setUserEventData(data);
-      // };
+
+      // get all events that user is attending and throw into state
+      const getUserEventData = async (userId) => {
+        try {
+        const response = await axios.get(`/api/userEventList/${userId}`);
+        const { data } = response;
+        setUserEventList(data);
+        } catch (e) {
+          console.log('error in getUserEventData: ', e.message);
+        }
+      };
+
       getEvents();
-      // getUserEventData(user.id);
+      getUserEventData(user.id);
+
       // get current user location and set the center of the map to that location
       if (navigator.geolocation) {
         // native browser geolocation functionality
@@ -118,6 +128,14 @@ function Map() {
   // yes ... we know that this could be refactored into multiple components but .... time
   return (
     <div className="map-section">
+      <div className='left-section'>
+        <EventList
+          userEventList={userEventList}
+          markerData={markerData}
+          setEventData={setEventData}
+          user={user}
+        />
+      </div>
       <GoogleMap
         zoom={14}
         center={mapPos}
@@ -191,10 +209,9 @@ function Map() {
             {/* Otherwise, display the RSVP component */}
             {eventData.email !== user.email && (
               <RSVPButton
-                user={user}
                 eventData={eventData}
-                setUserEventData={setUserEventData}
-                setMarkerData={setMarkerData}
+                user={user} 
+                setUserEventList={setUserEventList}
               />
             )}
           </div>
