@@ -123,13 +123,13 @@ eventController.getUsersEvents = async (req, res, next) => {
 };
 
 // getting all events BASED ON EVENT
-eventController.getEvents = async (req, res, next) => {
+eventController.getEvents2 = async (req, res, next) => {
   // console.log('res.locals.addedAttendee is', res.locals.addedAttendee);
   // console.log('WHY ARE YOU NOT PRINTING');
   const onlyEvents = [];
-  const { userID } = req.body;
+  const { userId } = req.body;
   const getUsersQuery = 'SELECT events_id FROM attendees WHERE users_id = ($1)';
-  const values = [userID];
+  const values = [userId];
   try {
     const usersEvents = await db.query(getUsersQuery, values);
     usersEvents.rows.map((event) => {

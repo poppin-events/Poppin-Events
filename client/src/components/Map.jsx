@@ -52,9 +52,10 @@ function Map() {
       // get all events that user is attending and throw into state
       const getUserEventData = async (userId) => {
         try {
-        const response = await axios.get(`/api/userEventList/${userId}`);
-        const { data } = response;
-        setUserEventList(data);
+          const response = await axios.get(`/api/userEventData/${userId}`);
+          const { data } = response;
+          console.log(`DATA TO CHECK USEREVENTLIST: `, data);
+          setUserEventList(data);
         } catch (e) {
           console.log('error in getUserEventData: ', e.message);
         }
@@ -128,7 +129,7 @@ function Map() {
   // yes ... we know that this could be refactored into multiple components but .... time
   return (
     <div className="map-section">
-      <div className='left-section'>
+      <div className="left-section">
         <EventList
           userEventList={userEventList}
           markerData={markerData}
@@ -210,7 +211,7 @@ function Map() {
             {eventData.email !== user.email && (
               <RSVPButton
                 eventData={eventData}
-                user={user} 
+                user={user}
                 setUserEventList={setUserEventList}
               />
             )}

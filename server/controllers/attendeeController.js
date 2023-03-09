@@ -10,7 +10,8 @@ attendeeController.addAttendee = async (req, res, next) => {
   // need to figure out how to manage duplicate entries
   console.log('inside of addAttendee');
   const { eventID } = req.params;
-  const { userID } = req.body;
+  const { userId } = req.body;
+  // console.log(`REQ BODY HERE: `, req.body);
   // const addAttendeeQuery = 'INSERT INTO attendees (users_id, events_id) VALUES ($1, $2)';
   const addAttendeeQuery = `
     INSERT INTO attendees (users_id, events_id) 
@@ -21,8 +22,8 @@ attendeeController.addAttendee = async (req, res, next) => {
       WHERE users_id = $1 AND events_id = $2
     )
   `;
-  const newAttendeeRow = [ userID, +eventID ];
-  
+  const newAttendeeRow = [userId, +eventID];
+  console.log(newAttendeeRow);
   try {
     console.log('SOMETHING');
     const response = await db.query(addAttendeeQuery, newAttendeeRow);
@@ -33,17 +34,18 @@ attendeeController.addAttendee = async (req, res, next) => {
   } catch (error) {
     return next({
       log: 'attendeeController.addAttendee error',
-      message: { err: 'Error adding attendee in database'}
+      message: { err: 'Error adding attendee in database' },
     });
   }
 };
 
-// gets the list of attendees for an event, returning their 
+// gets the list of attendees for an event, returning their
 attendeeController.getAttendees = async (req, res, next) => {
   console.log('WILL THIS PRINT FOR GODS SAKE');
   const { eventID } = req.params;
 
-  const query = 'SELECT * FROM users WHERE id IN (SELECT users_id FROM attendees WHERE events_id = ($1))';
+  const query =
+    'SELECT * FROM users WHERE id IN (SELECT users_id FROM attendees WHERE events_id = ($1))';
   const value = [+eventID];
 
   try {
@@ -57,7 +59,7 @@ attendeeController.getAttendees = async (req, res, next) => {
       log: 'error in attendeeController.getAttendees',
       message: {
         err,
-      }
+      },
     });
   }
 
