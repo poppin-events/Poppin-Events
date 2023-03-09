@@ -74,7 +74,8 @@ button {
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
 }
 
-.create-event-container {
+.create-event-container,
+.event-list.cont {
   text-align: center;
   /* outline: 1px solid gray; */
   height: min-content;
@@ -82,6 +83,13 @@ button {
   padding-top: 10px;
   border-radius: 5px;
   width: 300px;
+}
+
+.event-list-cont {
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  gap: 5px;
 }
 
 .button-primary {
@@ -214,11 +222,35 @@ button {
   border: 1px solid rgb(126, 126, 126);
   transition: 0.15s ease;
 }
-button:hover {
+button:hover, 
+.event-list-item:hover{
   background: rgba(246, 255, 238, 0.853);
 }
 
-.delete-button:hover,
-.cancel-button:hover {
+.delete-button:hover, 
+.cancel-button:hover{
   background: rgba(255, 209, 220, 0.453);
+}
+
+.event-list-item {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  border: 1px black solid;
+  border-radius: 3px;
+  padding: 0 10px;
+}
+
+.event-list-item-data {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+}
+
+.small-titles {
+  color: gray;
+  margin: 0;
+}
+
+.small-text {
+  margin: 0;
 }
